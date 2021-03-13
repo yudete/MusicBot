@@ -41,7 +41,7 @@ public class BotConfig {
     private String token, prefix, altprefix, helpWord, playlistsFolder, successEmoji, warningEmoji, errorEmoji,
             loadingEmoji, searchingEmoji;
     private boolean stayInChannel, songInGame, npImages, updatealerts, useEval, dbots;
-    private long owner, maxSeconds;
+    private long owner, maxSeconds, aloneTimeUntilStop;
     private OnlineStatus status;
     private Activity game;
     private Config aliases;
@@ -89,6 +89,7 @@ public class BotConfig {
             updatealerts = config.getBoolean("updatealerts");
             useEval = config.getBoolean("eval");
             maxSeconds = config.getLong("maxtime");
+            aloneTimeUntilStop = config.getLong("alonetimeuntilstop");
             playlistsFolder = config.getString("playlistsfolder");
             aliases = config.getConfig("aliases");
             dbots = owner == 113156185389092864L;
@@ -261,8 +262,14 @@ public class BotConfig {
         return FormatUtil.formatTime(maxSeconds * 1000);
     }
 
-    public boolean isTooLong(AudioTrack track) {
-        if (maxSeconds <= 0)
+    public long getAloneTimeUntilStop()
+    {
+        return aloneTimeUntilStop;
+    }
+    
+    public boolean isTooLong(AudioTrack track)
+    {
+        if(maxSeconds<=0)
             return false;
         return Math.round(track.getDuration() / 1000.0) > maxSeconds;
     }
